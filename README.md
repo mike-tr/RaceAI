@@ -1,7 +1,9 @@
 # RaceAI
 
 Idk what to show for seminar so i want to make a racing game where the "enemies" would be car that learned how to drive via Genetic algorithm.
+And i wanted to do it anyway, so 2 birds with 1 stone.
 
+## Done
 - Added Matrix Class that basically allows all matrix operations needed for neural networks, i.e Multiply Matrices, multiply be scalar, add scalar, devide,
   get random matrix etc...
 - Added support for applying any (doube) -> (double) function on every entry of the matrix. (i.e apply activation function).
@@ -14,3 +16,5 @@ Idk what to show for seminar so i want to make a racing game where the "enemies"
 - Add Sensors for AI
   - In this case simply raycast that tell the distance from "track borders" ( they are invisisble ).
 - Add Genetic algorithm, and training processs.
+
+#### ALL Made by Michael T.
