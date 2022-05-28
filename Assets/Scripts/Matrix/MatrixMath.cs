@@ -30,6 +30,10 @@ namespace MatrixMath {
             }
         }
 
+        public double[,] GetMatrix() {
+            return matrix.Clone() as double[,];
+        }
+
         public Matrix(int[,] matrix) {
             if (matrix.Length == 0) {
                 this.matrix = new double[0, 0];
@@ -102,6 +106,16 @@ namespace MatrixMath {
                 }
             }
             return m;
+        }
+
+        public Matrix ApplyFunc(System.Func<double, double> f) {
+            Matrix n = new Matrix(this);
+            for (int i = 0; i < n.rows; i++) {
+                for (int j = 0; j < n.columns; j++) {
+                    n.matrix[i, j] = f(n.matrix[i, j]);
+                }
+            }
+            return n;
         }
 
         public static Matrix operator +(Matrix m, double a) {

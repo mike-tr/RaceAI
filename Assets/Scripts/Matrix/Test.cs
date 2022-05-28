@@ -24,14 +24,12 @@ public class Test : MonoBehaviour {
         sw.Stop();
         print("time to run " + times + "multiplications is : " + sw.ElapsedMilliseconds + " ms");
         //var m2 = matrix + 1;
+        print(x);
         print(matrix);
         print(matrix2);
         print(x * matrix * matrix2);
         // print(matrix[0, 0]);
         // print(matrix[1, 0]);
-
-        print(x);
-        print(x.T);
     }
 
     // Update is called once per frame
