@@ -32,6 +32,14 @@ public class Car : MonoBehaviour {
         _powerInput = move;
     }
 
+    public Vector3 GetVelocity() {
+        return _rigidbody.velocity;
+    }
+
+    public Vector3 GetAngularVelocity() {
+        return _rigidbody.angularVelocity;
+    }
+
     public void SetColor(Color color) {
         //material.CopyPropertiesFromMaterial(material);
         //material.SetColor("_BaseColor", color);

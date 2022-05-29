@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 3294911719580001863}
   - component: {fileID: 5253076556661248578}
   - component: {fileID: 4279710839793007392}
-  - component: {fileID: 1774069494}
+  - component: {fileID: 1887039055672652069}
   m_Layer: 8
   m_Name: trackBorders
   m_TagString: Untagged
@@ -49,7 +49,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5439801586824761517}
-  m_Enabled: 0
+  m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -84,7 +84,7 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &1774069494
+--- !u!64 &1887039055672652069
 MeshCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
