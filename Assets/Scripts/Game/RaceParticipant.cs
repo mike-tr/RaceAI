@@ -60,7 +60,7 @@ public class RaceParticipant : MonoBehaviour {
         if (other.TryGetComponent(out CheckPoint checkPoint)) {
             if (checkPoint.ID == nextCheckPoint) {
                 var values = RaceManager.instance.GetNextCheckPoint(nextCheckPoint);
-                score += (values.Item2 * checkPoint.scoreFactor) / ((CurrentLapTime - lastCheckPointTime) + 10f);
+                score += (values.Item2 * checkPoint.scoreFactor) / ((CurrentLapTime - lastCheckPointTime) + 25f);
                 nextCheckPoint = values.Item1;
                 lastCheckPointTime = CurrentLapTime;
 

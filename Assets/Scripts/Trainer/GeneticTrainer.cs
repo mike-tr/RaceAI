@@ -29,8 +29,6 @@ public class GeneticTrainer : MonoBehaviour {
     private Transform genHolder;
     private float CurrentLapTime;
     private float lapTimerTimestamp = -1;
-
-
     // Start is called before the first frame update
     void Start() {
         instance = this;
@@ -43,52 +41,6 @@ public class GeneticTrainer : MonoBehaviour {
         if (PopulationSize % 2 == 1) {
             PopulationSize++;
         }
-        // var test = new List<int>();
-        // test.Add(5);
-        // test.Add(3);
-        // test.Add(13);
-        // test.Add(1);
-
-        // foreach (var item in test) {
-        //     print(item);
-        // }
-        // print(" --------- sorted -----------");
-        // foreach (var item in test.OrderBy(o => -o).ToList()) {
-        //     print(item);
-        // }
-        //print(layer);
-    }
-
-    bool Load() {
-        return false;
-    }
-
-    bool LoadFromFile() {
-        // idk read file and load
-
-        var path = Application.persistentDataPath
-                            + "/" + TrainerName + "/data.dat";
-        if (File.Exists(path)) {
-            BinaryFormatter bf = new BinaryFormatter();
-            FileStream file = File.Open(Application.persistentDataPath
-                            + "/" + TrainerName + "/data.dat", FileMode.Open);
-            GeneticTrainerData data = (GeneticTrainerData)bf.Deserialize(file);
-            file.Close();
-            LoadFromData(data);
-            Debug.Log("Game data loaded!");
-        } else {
-            Debug.Log("There is no save data!");
-            NewPopulation();
-        }
-        return false;
-    }
-
-    void LoadFromData(GeneticTrainerData data) {
-        this.GenerationNumber = data.GenerationNumber;
-        this.PopulationSize = data.PopulationSize;
-        this.priorityValue = data.priorityValue;
-        this.mutationRate = data.mutationRate;
-        this.bestScore = data.bestScore;
     }
 
     void StartRun() {
@@ -121,10 +73,16 @@ public class GeneticTrainer : MonoBehaviour {
         var nextGen = new List<CarAIData>();
         List<CarAi> SortedList = population.OrderBy(o => -o.GetParticipationObj().score).ToList();
 
-        var bestScore = SortedList[0].GetParticipationObj().score;
-        if (this.bestScore < bestScore) {
+        var best = SortedList[0];
+        var bestScore = best.GetParticipationObj().score;
+
+        if (GenerationNumber > 0) {
+            Save();
+        }
+        if (this.bestScore <= bestScore) {
             this.bestScore = bestScore;
-            RaceManager.instance.SetUIText(0, "Best Score : " + bestScore.ToString("0.00"));
+            best.SaveAs(TrainerName + "/best.dat");
+            print("saved best so far...");
         }
 
         List<CarAIData> parents = new List<CarAIData>();
@@ -149,9 +107,9 @@ public class GeneticTrainer : MonoBehaviour {
 
         GenerationNumber++;
         currentBestScore = 0;
-
         RaceManager.instance.SetUIText(3, "Generation : " + GenerationNumber.ToString());
-
+        RaceManager.instance.SetUIText(0, "Best Score : " + bestScore.ToString("0.00"));
+        RaceManager.instance.SetUIText(1, "Best Generation Score : " + currentBestScore.ToString("0.00"));
         StartRun();
     }
 
@@ -170,8 +128,82 @@ public class GeneticTrainer : MonoBehaviour {
         return (current, index);
     }
 
-    void Save() {
+    bool LoadFromFile() {
+        // idk read file and load
 
+        var path = Application.persistentDataPath
+                            + "/" + TrainerName + "/data.dat";
+        if (File.Exists(path)) {
+            BinaryFormatter bf = new BinaryFormatter();
+            FileStream file = File.Open(Application.persistentDataPath
+                            + "/" + TrainerName + "/data.dat", FileMode.Open);
+            GeneticTrainerData data = (GeneticTrainerData)bf.Deserialize(file);
+            file.Close();
+            LoadFromData(data);
+            Debug.Log("Game data loaded!");
+        } else {
+            Debug.Log("There is no save data!");
+            NewPopulation();
+        }
+        return false;
+    }
+
+    void LoadFromData(GeneticTrainerData data) {
+        this.GenerationNumber = data.GenerationNumber;
+        this.PopulationSize = data.PopulationSize;
+        this.priorityValue = data.priorityValue;
+        this.mutationRate = data.mutationRate;
+        this.bestScore = data.bestScore;
+
+        LoadGeneration(this.GenerationNumber);
+
+        RaceManager.instance.SetUIText(2, "Generation : " + this.GenerationNumber.ToString());
+        RaceManager.instance.SetUIText(0, "Best Score : " + bestScore.ToString("0.00"));
+        RaceManager.instance.SetUIText(1, "Best Generation Score : " + currentBestScore.ToString("0.00"));
+
+        print(this.GenerationNumber);
+    }
+
+    void LoadGeneration(int generationID) {
+        population = new List<CarAi>();
+        foreach (var car in population) {
+            Destroy(car.gameObject);
+        }
+
+        population = new List<CarAi>();
+        for (int i = 0; i < PopulationSize; i++) {
+            var car = Instantiate(AiPrefab, genHolder);
+            //car.GetRandom();
+            car.LoadFrom(TrainerName + "/Gen " + generationID.ToString() + "/memeber[" + i.ToString() + "].dat");
+            population.Add(car);
+            car.GetParticipationObj().OnScoreChange += TryUpdateScore;
+        }
+        StartRun();
+    }
+
+    void Save() {
+        var path = Application.persistentDataPath
+                    + "/" + TrainerName + "/data.dat";
+        BinaryFormatter bf = new BinaryFormatter();
+        Directory.CreateDirectory(Path.GetDirectoryName(path));
+        FileStream file = File.Create(path);
+        GeneticTrainerData data = new GeneticTrainerData();
+        data.bestScore = bestScore;
+        data.GenerationNumber = GenerationNumber;
+        data.mutationRate = mutationRate;
+        data.PopulationSize = PopulationSize;
+        data.priorityValue = priorityValue;
+        // data.savedInt = intToSave;
+        // data.savedFloat = floatToSave;
+        // data.savedBool = boolToSave;
+        bf.Serialize(file, data);
+        file.Close();
+
+        for (int i = 0; i < PopulationSize; i++) {
+            population[i].SaveAs(TrainerName + "/Gen " + GenerationNumber.ToString() + "/memeber[" + i.ToString() + "].dat");
+        }
+
+        Debug.Log("Model saved!");
     }
 
     CarAIData GetChild(CarAIData parentA, CarAIData parentB) {
@@ -220,8 +252,6 @@ public class GeneticTrainer : MonoBehaviour {
                 }
             }
         }
-
-
         return child;
     }
 

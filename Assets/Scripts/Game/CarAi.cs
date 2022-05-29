@@ -50,7 +50,7 @@ public class CarAi : MonoBehaviour {
         //car.SetColor(color);
         if (!skip) {
             if (autoLoad) {
-                LoadFromFile();
+                Load();
                 Save();
             } else {
                 enableAI = false;
@@ -138,14 +138,16 @@ public class CarAi : MonoBehaviour {
         return input;
     }
 
-    void LoadFromFile() {
+    void Load() {
         // idk read file and load
+        LoadFrom(saveFile + ".dat");
+    }
 
-        if (File.Exists(Application.persistentDataPath
-               + "/" + saveFile + ".dat")) {
+    public void LoadFrom(string name) {
+        var path = Application.persistentDataPath + "/" + name;
+        if (File.Exists(path)) {
             BinaryFormatter bf = new BinaryFormatter();
-            FileStream file = File.Open(Application.persistentDataPath
-                            + "/" + saveFile + ".dat", FileMode.Open);
+            FileStream file = File.Open(path, FileMode.Open);
             CarAIData data = (CarAIData)bf.Deserialize(file);
             file.Close();
             LoadFromData(data);
@@ -171,10 +173,14 @@ public class CarAi : MonoBehaviour {
         skip = true;
     }
 
-    public void Save() {
+    void Save() {
+        SaveAs(saveFile + ".dat");
+    }
+
+    public void SaveAs(string name) {
         BinaryFormatter bf = new BinaryFormatter();
         var path = Application.persistentDataPath
-                     + "/" + saveFile + ".dat";
+                     + "/" + name;
         Directory.CreateDirectory(Path.GetDirectoryName(path));
         FileStream file = File.Create(path);
         CarAIData data = GetData();

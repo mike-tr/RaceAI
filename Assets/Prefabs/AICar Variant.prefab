@@ -19,6 +19,18 @@ PrefabInstance:
       propertyPath: participant
       value: 
       objectReference: {fileID: 7753237318579059768}
+    - target: {fileID: 2057442865, guid: 517dec4963527854ea974cbe4271871c, type: 3}
+      propertyPath: layers.Array.data[1]
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 2057442865, guid: 517dec4963527854ea974cbe4271871c, type: 3}
+      propertyPath: layers.Array.data[2]
+      value: 35
+      objectReference: {fileID: 0}
+    - target: {fileID: 2057442865, guid: 517dec4963527854ea974cbe4271871c, type: 3}
+      propertyPath: layers.Array.data[3]
+      value: 20
+      objectReference: {fileID: 0}
     - target: {fileID: 1622438041206697013, guid: 517dec4963527854ea974cbe4271871c, type: 3}
       propertyPath: setUI
       value: 0
