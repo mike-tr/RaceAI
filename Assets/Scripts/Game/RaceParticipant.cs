@@ -12,18 +12,24 @@ public class RaceParticipant : MonoBehaviour {
     public float lapTimerTimestamp = -1;
     public int LapCount = 0;
 
+    public delegate void scoreChange(float score);
+    public scoreChange OnScoreChange;
+
     [SerializeField] bool setUI = false;
 
     private float lastCheckPointTime = 0;
     // Start is called before the first frame update
     void Start() {
         LapCount = -1;
-        StartLap();
+        //StartLap();
     }
 
-    void StartLap() {
+    public void StartLap() {
         LapCount++;
+        score = 0;
         nextCheckPoint = 1;
+        BestLapTime = Mathf.Infinity;
+        LastLapTime = Mathf.Infinity;
         lastCheckPointTime = 0;
         lapTimerTimestamp = Time.time;
     }
@@ -54,9 +60,13 @@ public class RaceParticipant : MonoBehaviour {
         if (other.TryGetComponent(out CheckPoint checkPoint)) {
             if (checkPoint.ID == nextCheckPoint) {
                 var values = RaceManager.instance.GetNextCheckPoint(nextCheckPoint);
-                score += values.Item2 / (CurrentLapTime - lastCheckPointTime);
+                score += (values.Item2 * checkPoint.scoreFactor) / ((CurrentLapTime - lastCheckPointTime) + 10f);
                 nextCheckPoint = values.Item1;
                 lastCheckPointTime = CurrentLapTime;
+
+                if (OnScoreChange != null) {
+                    OnScoreChange.Invoke(score);
+                }
 
                 if (setUI) {
                     RaceManager.instance.SetScore(score);

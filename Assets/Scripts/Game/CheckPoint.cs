@@ -6,6 +6,7 @@ public class CheckPoint : MonoBehaviour {
     // Start is called before the first frame update
     [SerializeField] int id = 0;
     public int ID { get { return id; } }
+    public float scoreFactor = 1f;
     void OnValidate() {
         id = 0;
         foreach (var c in name) {

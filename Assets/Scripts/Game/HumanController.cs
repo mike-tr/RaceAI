@@ -9,8 +9,12 @@ public class HumanController : MonoBehaviour {
     // Start is called before the first frame update
     void Start() {
         car = GetComponent<Car>();
+        var participant = GetComponent<RaceParticipant>();
         CameraFollow.instace.followTarget = transform;
         car.SetColor(color);
+
+        // in essense we want this to be managed by some other entity.
+        participant.StartLap();
     }
 
     // Update is called once per frame

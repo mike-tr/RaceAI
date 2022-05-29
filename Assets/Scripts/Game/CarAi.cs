@@ -22,7 +22,8 @@ public class CarAi : MonoBehaviour {
     public ActivationFunctions[] activations;
     public Color color = Color.white;
 
-    private Car car;
+    [SerializeField] private Car car;
+    [SerializeField] private RaceParticipant participant;
 
     [SerializeField] LayerMask layerMask = 8;
 
@@ -37,26 +38,30 @@ public class CarAi : MonoBehaviour {
 
     public float rayDistance = 15f;
     public bool ShowRayCast = false;
-    public bool enableAI;
+    [SerializeField] private bool enableAI;
+    public bool autoLoad = false;
+
+    private bool skip = false;
+
     // Start is called before the first frame update
     void Start() {
         //GetRandom();
-        car = GetComponent<Car>();
+        //car = GetComponent<Car>();
         //car.SetColor(color);
-        LoadFromFile();
-
-        var fakeInput = Matrix.Rand(1, layers[0], 0, 20);
-        print(fakeInput);
-        print(Compute(fakeInput));
-
-        Save();
+        if (!skip) {
+            if (autoLoad) {
+                LoadFromFile();
+                Save();
+            } else {
+                enableAI = false;
+            }
+        }
     }
 
     private void Update() {
         if (enableAI) {
             var matrix = GetInput();
             var output = Compute(matrix);
-            print(output);
 
             car.SetPower((float)output[0, 0]);
             car.SetSteer((float)output[0, 1]);
@@ -69,7 +74,18 @@ public class CarAi : MonoBehaviour {
         }
     }
 
-    void GetRandom() {
+    public void StartRace() {
+        enableAI = true;
+        participant.StartLap();
+        GetComponent<Rigidbody>().velocity = Vector3.zero;
+        GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
+    }
+
+    public RaceParticipant GetParticipationObj() {
+        return participant;
+    }
+
+    public void GetRandom() {
         this.color = new Color(Random.value, Random.value, Random.value);
         this.weights = new Matrix[layers.Length - 1];
         for (int i = 0; i < layers.Length - 1; i++) {
@@ -77,6 +93,7 @@ public class CarAi : MonoBehaviour {
         }
         car.SetColor(color);
         this.rayDirections = MathDirections.GetSphereDirections(layers[0] - 2, ydump);
+        skip = true;
     }
 
     Matrix Compute(Matrix input) {
@@ -139,7 +156,7 @@ public class CarAi : MonoBehaviour {
         }
     }
 
-    void LoadFromData(CarAIData data) {
+    public void LoadFromData(CarAIData data) {
         this.color = new Color(data.color[0], data.color[1], data.color[2]);
         this.layers = data.layers;
         this.activations = data.activations;
@@ -151,12 +168,25 @@ public class CarAi : MonoBehaviour {
         }
         car.SetColor(color);
         this.rayDirections = MathDirections.GetSphereDirections(layers[0] - 2, ydump);
+        skip = true;
     }
 
-    void Save() {
+    public void Save() {
         BinaryFormatter bf = new BinaryFormatter();
-        FileStream file = File.Create(Application.persistentDataPath
-                     + "/" + saveFile + ".dat");
+        var path = Application.persistentDataPath
+                     + "/" + saveFile + ".dat";
+        Directory.CreateDirectory(Path.GetDirectoryName(path));
+        FileStream file = File.Create(path);
+        CarAIData data = GetData();
+        // data.savedInt = intToSave;
+        // data.savedFloat = floatToSave;
+        // data.savedBool = boolToSave;
+        bf.Serialize(file, data);
+        file.Close();
+        Debug.Log("Model saved!");
+    }
+
+    public CarAIData GetData() {
         CarAIData data = new CarAIData();
         data.weights = new double[weights.Length][,];
         for (int i = 0; i < weights.Length; i++) {
@@ -167,12 +197,7 @@ public class CarAi : MonoBehaviour {
         data.activations = activations;
         data.rayRatio = rayRatio;
         data.ydump = ydump;
-        // data.savedInt = intToSave;
-        // data.savedFloat = floatToSave;
-        // data.savedBool = boolToSave;
-        bf.Serialize(file, data);
-        file.Close();
-        Debug.Log("Model saved!");
+        return data;
     }
 
     public static System.Func<double, double> GetFunc(ActivationFunctions fname) {

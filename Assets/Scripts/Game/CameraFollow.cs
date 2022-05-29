@@ -27,9 +27,10 @@ public class CameraFollow : MonoBehaviour {
 
     // Update is called once per frame
     void FixedUpdate() {
-        transform.position = Vector3.Lerp(transform.position, followTarget.position, speed * Time.fixedDeltaTime);
-        var rot = Quaternion.Euler(0, followTarget.eulerAngles.y, 0);
-        transform.rotation = Quaternion.Lerp(transform.rotation, rot, rotationSpeed * Time.fixedDeltaTime);
-
+        if (followTarget != null) {
+            transform.position = Vector3.Lerp(transform.position, followTarget.position, speed * Time.fixedDeltaTime);
+            var rot = Quaternion.Euler(0, followTarget.eulerAngles.y, 0);
+            transform.rotation = Quaternion.Lerp(transform.rotation, rot, rotationSpeed * Time.fixedDeltaTime);
+        }
     }
 }

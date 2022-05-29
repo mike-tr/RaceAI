@@ -12,6 +12,8 @@ public class RaceManager : MonoBehaviour {
     [SerializeField] TextMeshProUGUI Time;
     [SerializeField] TextMeshProUGUI BestTime;
     [SerializeField] TextMeshProUGUI LastTime;
+
+    TextMeshProUGUI[] UIT;
     // Start is called before the first frame update
     void Awake() {
         if (instance == null) {
@@ -19,6 +21,11 @@ public class RaceManager : MonoBehaviour {
         } else {
             Destroy(this);
         }
+        UIT = new TextMeshProUGUI[4];
+        UIT[0] = Score;
+        UIT[1] = BestTime;
+        UIT[2] = LastTime;
+        UIT[3] = Time;
     }
 
     public (int, float, bool) GetNextCheckPoint(int current) {
@@ -44,6 +51,10 @@ public class RaceManager : MonoBehaviour {
     public void SetTime(float time) {
         //print(time);
         Time.text = "Current time : " + time.ToString("0.00");
+    }
+
+    public void SetUIText(int index, string label) {
+        UIT[index].text = label;
     }
 
     // Update is called once per frame

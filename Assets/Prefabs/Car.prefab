@@ -14,7 +14,8 @@ GameObject:
   - component: {fileID: 8708468558509365805}
   - component: {fileID: 8644115653234048901}
   - component: {fileID: 1622438041206697013}
-  m_Layer: 0
+  - component: {fileID: 2057442865}
+  m_Layer: 6
   m_Name: Car
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -28,7 +29,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3267900869640096228}
-  m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 48.90945, y: 0.94, z: 13.76}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -105,6 +106,7 @@ MonoBehaviour:
   centerOfMass: {fileID: 8852230129081047375}
   motorTorque: 1200
   maxSteer: 20
+  material: {fileID: 0}
 --- !u!54 &8644115653234048901
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -141,6 +143,30 @@ MonoBehaviour:
   lapTimerTimestamp: 0
   LapCount: 0
   setUI: 1
+--- !u!114 &2057442865
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3267900869640096228}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a12cdf4409db28b438f4dc088693051b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  layers: 1d00000023000000190000000a00000002000000
+  activations: 00000000000000000000000001000000
+  color: {r: 0.6392157, g: 0.5513181, b: 0.7019608, a: 1}
+  layerMask:
+    serializedVersion: 2
+    m_Bits: 264
+  rayRatio: 0.3
+  ydump: 0.2
+  saveFile: dirtest2/get0/best
+  rayDistance: 15
+  ShowRayCast: 0
+  enableAI: 1
 --- !u!1 &4665200476324073975
 GameObject:
   m_ObjectHideFlags: 0
@@ -150,7 +176,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3256001433262686120}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Wheels
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -185,7 +211,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8852230129081047375}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: CenterOfMass
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -399,6 +425,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: FRT
       objectReference: {fileID: 0}
+    - target: {fileID: 1308406698295100644, guid: 94653ebb5acd7db418b0366f79b01e3c, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 2033295449385517721, guid: 94653ebb5acd7db418b0366f79b01e3c, type: 3}
       propertyPath: m_LocalRotation.w
       value: 0
@@ -418,6 +448,10 @@ PrefabInstance:
     - target: {fileID: 2033295449385517721, guid: 94653ebb5acd7db418b0366f79b01e3c, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
       value: 180
+      objectReference: {fileID: 0}
+    - target: {fileID: 7161556237301032989, guid: 94653ebb5acd7db418b0366f79b01e3c, type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 7851363001503979497, guid: 94653ebb5acd7db418b0366f79b01e3c, type: 3}
       propertyPath: steer
@@ -509,6 +543,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: FLT
       objectReference: {fileID: 0}
+    - target: {fileID: 1308406698295100644, guid: 94653ebb5acd7db418b0366f79b01e3c, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 7161556237301032989, guid: 94653ebb5acd7db418b0366f79b01e3c, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 7851363001503979497, guid: 94653ebb5acd7db418b0366f79b01e3c, type: 3}
       propertyPath: steer
       value: 1
@@ -599,6 +641,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: BLT
       objectReference: {fileID: 0}
+    - target: {fileID: 1308406698295100644, guid: 94653ebb5acd7db418b0366f79b01e3c, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 2033295449385517721, guid: 94653ebb5acd7db418b0366f79b01e3c, type: 3}
       propertyPath: m_LocalRotation.w
       value: 0
@@ -618,6 +664,10 @@ PrefabInstance:
     - target: {fileID: 2033295449385517721, guid: 94653ebb5acd7db418b0366f79b01e3c, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
       value: 180
+      objectReference: {fileID: 0}
+    - target: {fileID: 7161556237301032989, guid: 94653ebb5acd7db418b0366f79b01e3c, type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 7851363001503979497, guid: 94653ebb5acd7db418b0366f79b01e3c, type: 3}
       propertyPath: power
