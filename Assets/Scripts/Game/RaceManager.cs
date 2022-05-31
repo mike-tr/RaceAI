@@ -13,7 +13,10 @@ public class RaceManager : MonoBehaviour {
     [SerializeField] TextMeshProUGUI BestTime;
     [SerializeField] TextMeshProUGUI LastTime;
 
-    TextMeshProUGUI[] UIT;
+    public TextMeshProUGUI[] UIT;
+
+    public bool disableCarCollision = true;
+    public int carLayer = 6;
     // Start is called before the first frame update
     void Awake() {
         if (instance == null) {
@@ -21,11 +24,13 @@ public class RaceManager : MonoBehaviour {
         } else {
             Destroy(this);
         }
-        UIT = new TextMeshProUGUI[4];
-        UIT[0] = Score;
-        UIT[1] = BestTime;
-        UIT[2] = LastTime;
-        UIT[3] = Time;
+
+        Physics.IgnoreLayerCollision(carLayer, carLayer, disableCarCollision);
+        //UIT = new TextMeshProUGUI[4];
+        // UIT[0] = Score;
+        // UIT[1] = BestTime;
+        // UIT[2] = LastTime;
+        // UIT[3] = Time;
     }
 
     public (int, float, bool) GetNextCheckPoint(int current) {

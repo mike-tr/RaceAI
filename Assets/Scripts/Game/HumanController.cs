@@ -14,7 +14,7 @@ public class HumanController : MonoBehaviour {
         car.SetColor(color);
 
         // in essense we want this to be managed by some other entity.
-        participant.StartLap();
+        participant.ResetParticipant();
     }
 
     // Update is called once per frame

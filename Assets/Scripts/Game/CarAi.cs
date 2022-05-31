@@ -59,7 +59,7 @@ public class CarAi : MonoBehaviour {
     }
 
     private void Update() {
-        if (enableAI) {
+        if (enableAI && transform.position.y > -10) {
             var matrix = GetInput();
             var output = Compute(matrix);
 
@@ -76,7 +76,7 @@ public class CarAi : MonoBehaviour {
 
     public void StartRace() {
         enableAI = true;
-        participant.StartLap();
+        participant.ResetParticipant();
         GetComponent<Rigidbody>().velocity = Vector3.zero;
         GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
     }
@@ -164,6 +164,9 @@ public class CarAi : MonoBehaviour {
         this.activations = data.activations;
         this.rayRatio = data.rayRatio;
         this.ydump = data.ydump;
+        if (data.rayDistance > 0) {
+            this.rayDistance = data.rayDistance;
+        }
         this.weights = new Matrix[data.weights.Length];
         for (int i = 0; i < weights.Length; i++) {
             this.weights[i] = new Matrix(data.weights[i]);
@@ -175,24 +178,25 @@ public class CarAi : MonoBehaviour {
 
     void Save() {
         SaveAs(saveFile + ".dat");
+        Debug.Log("Model saved!");
     }
 
-    public void SaveAs(string name) {
+    public void SaveAs(string name, bool saveStats = false) {
         BinaryFormatter bf = new BinaryFormatter();
         var path = Application.persistentDataPath
                      + "/" + name;
         Directory.CreateDirectory(Path.GetDirectoryName(path));
         FileStream file = File.Create(path);
-        CarAIData data = GetData();
+        CarAIData data = GetData(saveStats);
         // data.savedInt = intToSave;
         // data.savedFloat = floatToSave;
         // data.savedBool = boolToSave;
         bf.Serialize(file, data);
         file.Close();
-        Debug.Log("Model saved!");
+        //Debug.Log("Model saved!");
     }
 
-    public CarAIData GetData() {
+    public CarAIData GetData(bool withStats) {
         CarAIData data = new CarAIData();
         data.weights = new double[weights.Length][,];
         for (int i = 0; i < weights.Length; i++) {
@@ -203,6 +207,11 @@ public class CarAi : MonoBehaviour {
         data.activations = activations;
         data.rayRatio = rayRatio;
         data.ydump = ydump;
+        data.rayDistance = rayDistance;
+        data.trainingStatistics = new CarAITrainingStatistics();
+        data.trainingStatistics.bestLapTime = participant.BestLapTime;
+        data.trainingStatistics.score = participant.score;
+        data.trainingStatistics.lapsCompleted = participant.LapCount;
         return data;
     }
 

@@ -12,7 +12,7 @@ public class RaceParticipant : MonoBehaviour {
     public float lapTimerTimestamp = -1;
     public int LapCount = 0;
 
-    public delegate void scoreChange(float score);
+    public delegate void scoreChange(float score, int id);
     public scoreChange OnScoreChange;
 
     [SerializeField] bool setUI = false;
@@ -20,18 +20,23 @@ public class RaceParticipant : MonoBehaviour {
     private float lastCheckPointTime = 0;
     // Start is called before the first frame update
     void Start() {
-        LapCount = -1;
+        //LapCount = -1;
         //StartLap();
     }
 
-    public void StartLap() {
-        LapCount++;
+    public void ResetParticipant() {
         score = 0;
-        nextCheckPoint = 1;
+        LapCount = -1;
         BestLapTime = Mathf.Infinity;
+        NextLap();
+    }
+
+    void NextLap() {
+        nextCheckPoint = 1;
         LastLapTime = Mathf.Infinity;
         lastCheckPointTime = 0;
         lapTimerTimestamp = Time.time;
+        LapCount++;
     }
 
     void EndLap() {
@@ -42,7 +47,7 @@ public class RaceParticipant : MonoBehaviour {
             }
         }
         LastLapTime = CurrentLapTime;
-        StartLap();
+        NextLap();
         if (setUI) {
             RaceManager.instance.SetLastLapTime(CurrentLapTime);
         }
@@ -60,12 +65,13 @@ public class RaceParticipant : MonoBehaviour {
         if (other.TryGetComponent(out CheckPoint checkPoint)) {
             if (checkPoint.ID == nextCheckPoint) {
                 var values = RaceManager.instance.GetNextCheckPoint(nextCheckPoint);
-                score += (values.Item2 * checkPoint.scoreFactor) / ((CurrentLapTime - lastCheckPointTime) + 25f);
+                var speed_points = values.Item2 / ((CurrentLapTime - lastCheckPointTime) + 10);
+                score += (values.Item2 + speed_points) * checkPoint.scoreFactor * 0.1f;
                 nextCheckPoint = values.Item1;
                 lastCheckPointTime = CurrentLapTime;
 
                 if (OnScoreChange != null) {
-                    OnScoreChange.Invoke(score);
+                    OnScoreChange.Invoke(score, checkPoint.ID + (LapCount * RaceManager.instance.CheckPoints));
                 }
 
                 if (setUI) {
