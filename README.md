@@ -3,6 +3,8 @@
 Idk what to show for seminar so i want to make a racing game where the "enemies" would be car that learned how to drive via Genetic algorithm.
 And i wanted to do it anyway, so 2 birds with 1 stone.
 
+![Alt Text](https://github.com/mike-tr/RaceAI/blob/main/GitImages/CarGame.gif)
+
 ## Done
 - Added Matrix Class that basically allows all matrix operations needed for neural networks, i.e Multiply Matrices, multiply be scalar, add scalar, devide,
   get random matrix etc...
