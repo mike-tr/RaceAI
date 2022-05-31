@@ -10,11 +10,17 @@ And i wanted to do it anyway, so 2 birds with 1 stone.
 - Built a car model, track, trees, envirment in blender and added to game.
 - Added Car Scripts times etc...
 - Added CarAI neuralnetwork, as well as a save/load system.
-
-
-## Need to do:
 - Add Sensors for AI
   - In this case simply raycast that tell the distance from "track borders" ( they are invisisble ).
 - Add Genetic algorithm, and training processs.
 
-#### ALL Made by Michael T.
+
+## Need to do:
+- Possible allow AI to hit other cars in training so they can avoid collitions ( In the inital stage each CarAI has ignored all other cars ).
+- Add Respawns and detect off course position.
+- Possibly add Directions into the AI-Brain, try to use the Neural networks as input, and add on top of it directions.
+
+#### Made by Michael Trushlin.
+
+Big thanks to the Imphenzia Youtube channel for the tutorials on Making Low Poly models, and tutorial to make a racing game.
+( Reference https://www.youtube.com/watch?v=ODVV3eUE5zM&t=0s&ab_channel=Imphenzia )
